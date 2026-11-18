@@ -1,10 +1,10 @@
 # PATHSNAP: DISTRIBUTED MAP-MATCHING & ROUTE RECONSTRUCTION
 ## Comprehensive Technical Report
 **Team Members:**
-- **Person A (Data Processing, EDA, Feature Engineering):** Saanvi Samayam
-- **Person B (Model Development, Comparison & Bayesian Tuning):** Rishab Naveen
-- **Person C (HMM & Viterbi Sequence Reconstruction, Route Continuity):** Nishant Hegde
-- **Person D (FastAPI Serving Backend, Streamlit UI & Deployment):** Prabhu R Habagali  
+- **Saanvi Samayam:** Data Processing, EDA, Candidate Feature Engineering
+- **Rishab Naveen:** Model Development, 5-Model Benchmark & Bayesian Tuning
+- **Nishant Hegde:** HMM & Viterbi Sequence Reconstruction, Route Continuity
+- **Prabhu R Habagali:** FastAPI Serving Backend, Streamlit UI & Deployment  
 **Institution:** PES University | UE24CS352A Hackathon  
 
 ---
@@ -21,15 +21,15 @@ HMM/Viterbi decoder reconstructs a connected route. A FastAPI backend
 ## Repository layout
 | Folder | Contents | Owner / Member |
 |---|---|---|
-| `data_processing/` | raw-data loading, cleaning, projection, per-point labelling | Saanvi Samayam (Person A) |
-| `eda/` | exploratory analysis + Folium EDA maps | Saanvi Samayam (Person A) |
-| `features/` | candidate generation and feature engineering | Saanvi Samayam (Person A) |
-| `models/` | training + comparison of 5+ models | Rishab Naveen (Person B) |
-| `tuning/` | Bayesian hyperparameter optimisation | Rishab Naveen (Person B) |
-| `hmm/` | HMM / Viterbi route reconstruction, evaluation, error analysis | Nishant Hegde (Person C) |
-| `api/` | FastAPI backend | Prabhu R Habagali (Person D) |
-| `ui/` | evaluator interface | Prabhu R Habagali (Person D) |
-| `viz/` | Folium route maps (`viz/route_map.py`), saved to `viz/maps/` | Nishant Hegde (Person C) |
+| `data_processing/` | raw-data loading, cleaning, projection, per-point labelling | Saanvi Samayam |
+| `eda/` | exploratory analysis + Folium EDA maps | Saanvi Samayam |
+| `features/` | candidate generation and feature engineering | Saanvi Samayam |
+| `models/` | training + comparison of 5+ models | Rishab Naveen |
+| `tuning/` | Bayesian hyperparameter optimisation | Rishab Naveen |
+| `hmm/` | HMM / Viterbi route reconstruction, evaluation, error analysis | Nishant Hegde |
+| `api/` | FastAPI backend | Prabhu R Habagali |
+| `ui/` | evaluator interface | Prabhu R Habagali |
+| `viz/` | Folium route maps (`viz/route_map.py`), saved to `viz/maps/` | Nishant Hegde |
 | `report_materials/`| Complete technical report, PDF, individual section markdown files, figures, tables | Team |
 | `results/` | CSVs, logs, plots, maps | Team |
 | `artifacts/` | trained model (`model.joblib`) + configs | Rishab Naveen / Nishant Hegde |
@@ -50,12 +50,17 @@ data/student_test/<trip_id>/...
 python eda/eda.py
 python eda/folium_eda_map.py --part train --trips 00000048 00000002
 
-# 2. Labels, candidates and features
+# 2. Labels, candidates and features (Saanvi Samayam)
 python features/build_dataset.py
 
-# 3. Models            -> TODO (Person B)
-# 4. Bayesian tuning   -> TODO (Person B: python tuning/tune_optuna.py)
-# 5. HMM / Viterbi (needs artifacts/model.joblib from step 3)
+# 3. Models (Rishab Naveen)
+python -m models.m4_boosting     # Trains LightGBM on 5-fold GroupKFold
+python -m models.compare         # Generates comparison tables and benchmark plots
+
+# 4. Bayesian tuning (Rishab Naveen)
+python -m tuning.tune_optuna     # 25-trial Optuna TPE tuning -> artifacts/model.joblib
+
+# 5. HMM / Viterbi (Nishant Hegde)
 python -m hmm.test_synthetic --edge                       # sanity test, no data needed
 python -m hmm.make_scored                                 # OOF train + student_test probabilities -> artifacts/scored/
 python -m hmm.evaluate --part train --estimate            # data-driven sigma / beta
@@ -64,7 +69,10 @@ python -m hmm.evaluate --part student_test --scored artifacts/scored/student_tes
 python -m hmm.analyze                                     # error analysis
 python -m hmm.plots                                       # results/hmm/plots/
 python -m viz.route_map --trip data/student_test/00000091 --scored artifacts/scored/student_test_scored.pkl
-# 6. API / UI          -> TODO (Person D)
+
+# 6. API / UI (Prabhu R Habagali)
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+streamlit run ui/app.py
 ```
 
 ### Viewing Folium maps
@@ -92,7 +100,7 @@ Details: `results/hmm/` and report sections 5-6.
 - Labels (`.route`) are read only for training/evaluation, never by the prediction pipeline.
 - Cross-validation is grouped by trip (`trip_id`).
 
-See `README_personA.md` for data-processing design decisions.
+See `README_data_processing.md` for data-processing design decisions.
 
 ## AI-assistance disclosure
 TODO – describe which parts used AI tools, as required by the event policy.
@@ -129,10 +137,10 @@ TODO – describe which parts used AI tools, as required by the event policy.
 
 # Candidate Road Segment Classification & Bayesian Hyperparameter Optimization
 
-**Author:** Rishab Naveen (Person B: Model Development, Comparison & Bayesian Tuning)  
+**Author:** Rishab Naveen (Model Development, Comparison & Bayesian Tuning)  
 **Team:** PathSnap (UE24CS352A Hackathon, PES University)  
-**Collaborators:** Saanvi Samayam (Person A), Nishant Hegde (Person C), Prabhu R Habagali (Person D)  
-**Input:** Candidate road segments and 21 spatial/kinematic features generated by Saanvi Samayam (Person A)  
+**Collaborators:** Saanvi Samayam, Nishant Hegde, Prabhu R Habagali  
+**Input:** Candidate road segments and 21 spatial/kinematic features generated by Saanvi Samayam  
 **Output:** Calibrated posterior probabilities $P(\text{arc} \mid \text{features})$, trained Pipelines, and Optuna-tuned LightGBM  
 
 ---
@@ -140,7 +148,7 @@ TODO – describe which parts used AI tools, as required by the event policy.
 ## 3. Model Comparison & Evaluation
 
 ### 3.1 Problem Formulation & Metric Definitions
-Candidate road selection is framed as a supervised point-to-arc classification problem under extreme class imbalance. For each GPS observation $t$ with coordinates $(x_t, y_t)$, Person A's spatial candidate generation retrieves up to $K=10$ candidate road segments within radius $R=60\text{ m}$. Exactly one candidate (or zero in candidate misses) is the true road segment ($y=1$), while competing candidate arcs are negatives ($y=0$), creating an imbalance ratio of approximately $6:1$ to $7:1$ (positive rate $\approx 14.3\%$).
+Candidate road selection is framed as a supervised point-to-arc classification problem under extreme class imbalance. For each GPS observation $t$ with coordinates $(x_t, y_t)$, Saanvi Samayam's spatial candidate generation retrieves up to $K=10$ candidate road segments within radius $R=60\text{ m}$. Exactly one candidate (or zero in candidate misses) is the true road segment ($y=1$), while competing candidate arcs are negatives ($y=0$), creating an imbalance ratio of approximately $6:1$ to $7:1$ (positive rate $\approx 14.3\%$).
 
 To evaluate candidate scoring models rigorously without data leakage:
 1. **GroupKFold Cross-Validation (5 Folds):** Grouped strictly by `trip_id`. GPS points from the same trip exhibit strong temporal autocorrelation and sensor drift. Standard random K-Fold would leak trip trajectories across folds, giving falsely optimistic validation scores. GroupKFold guarantees entire trips are held out.
@@ -149,8 +157,8 @@ To evaluate candidate scoring models rigorously without data leakage:
 3. **Macro F1:** The unweighted average of F1 scores across both negative and positive classes: $\frac{1}{2}(F_{1, \text{neg}} + F_{1, \text{pos}})$. This prevents trivial majority-class classifiers from scoring high.
 4. **Log Loss (Binary Cross-Entropy):**
    $$\mathcal{L}_{\log} = -\frac{1}{N} \sum_{i=1}^N \left[ y_i \ln(\hat{p}_i) + (1 - y_i) \ln(1 - \hat{p}_i) \right]$$
-   Probability quality is essential because Person C's HMM directly treats $\hat{p}_i$ as observation emission probabilities $P(O_t \mid S_t = a)$. Poorly calibrated probabilities distort Viterbi trellis dynamic programming.
-5. **Inference Latency:** Wall-clock scoring time per trip in milliseconds, critical for real-time serving in Person D's FastAPI backend.
+   Probability quality is essential because Nishant Hegde's HMM directly treats $\hat{p}_i$ as observation emission probabilities $P(O_t \mid S_t = a)$. Poorly calibrated probabilities distort Viterbi trellis dynamic programming.
+5. **Inference Latency:** Wall-clock scoring time per trip in milliseconds, critical for real-time serving in Prabhu R Habagali's FastAPI backend.
 
 ---
 
@@ -278,9 +286,9 @@ From `results/tuning/best_params.json` (Trial #15):
 The tuned pipeline (`StandardScaler` + `LGBMClassifier`) was exported to:
 - `artifacts/model.joblib` (Full self-contained pipeline, 330 KB)
 - `artifacts/model_meta.json` (Hyperparameters and evaluation metadata)
-- `artifacts/features/scored_train_oof.parquet` (Out-of-fold scored training data for Person C's HMM transition matrix estimation)
+- `artifacts/features/scored_train_oof.parquet` (Out-of-fold scored training data for Nishant Hegde's HMM transition matrix estimation)
 - `artifacts/features/scored_student_test.parquet` (Scored test set ready for Viterbi decoding)
-- `models/predict.py`: Implements `score_candidates(cand_df)` matching the contract for Person D's FastAPI server.
+- `models/predict.py`: Implements `score_candidates(cand_df)` matching the contract for Prabhu R Habagali's FastAPI server.
 
 
 ---
@@ -293,7 +301,7 @@ Independent point-level candidate classifications predict road arcs based purely
 We implemented a Hidden Markov Model (HMM) decoded via the Viterbi algorithm to resolve trajectory-level sequence continuity:
 - **Hidden States ($S_t$):** The set of candidate road arcs $a \in \mathcal{C}_t$ generated for GPS point $t$.
 - **Observations ($O_t$):** The GPS observation vector (coordinates, speed, heading, timestamp).
-- **Emission Probability ($P(O_t \mid S_t = a)$):** The calibrated posterior probability $\hat{P}(a \mid x)$ output by Person B's tuned LightGBM model:
+- **Emission Probability ($P(O_t \mid S_t = a)$):** The calibrated posterior probability $\hat{P}(a \mid x)$ output by Rishab Naveen's tuned LightGBM model:
   $$P(O_t \mid S_t = a) = (\hat{P}(a \mid x_t) + \epsilon)^\alpha$$
   where $\alpha = 0.7$ and $\epsilon = 0.0001$.
 - **Transition Probability ($P(S_{t+1} = b \mid S_t = a)$):** Models the plausibility of moving from road arc $a$ to arc $b$ within time $\Delta t$:
@@ -344,10 +352,10 @@ Place the supplied dataset under `data/student_test/<trip_id>/`.  The current
 student folder has no `eval_test` directory, so the server deliberately uses
 `student_test` until organisers provide the evaluation partition.
 
-Install Person D's packages together with the data/feature packages:
+Install Prabhu R Habagali's packages together with the data/feature packages:
 
 ```powershell
-pip install -r requirements_personD.txt
+pip install -r requirements_api_ui.txt
 pip install numpy pandas scipy scikit-learn
 ```
 
@@ -362,7 +370,7 @@ uvicorn api.main:app --host 0.0.0.0 --port 8000
 Open `http://127.0.0.1:8000/docs` on Laptop 1 to test the API. `GET /health`
 checks startup; `GET /trips` lists choices; `POST /predict` runs a route.
 
-On Laptop 2, install `requirements_personD.txt`, then run:
+On Laptop 2, install `requirements_api_ui.txt`, then run:
 
 ```powershell
 $env:PATHSNAP_API_URL = "http://LAPTOP_1_IP:8000"

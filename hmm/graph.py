@@ -14,13 +14,13 @@ Design decisions
 ----------------
 * Arcs are DIRECTED (from_node -> to_node). EDA showed ~92 % of arcs have a
   reverse arc, so two-way streets are two arcs; one-way streets are respected.
-* Edge weight = arc length in metres, using Person A's per-trip local
+* Edge weight = arc length in metres, using Saanvi Samayam's per-trip local
   projection (data_processing.io_utils.project).
 * Networks have up to ~300k arcs, but a trip only touches a corridor around
   its GPS track. We keep only arcs within `buffer_m` of the track
-  (Person A's `relevant_arcs`) and run Dijkstra on that sub-graph.
+  (Saanvi Samayam's `relevant_arcs`) and run Dijkstra on that sub-graph.
 * A position on the network is (arc, frac) where frac in [0, 1] is the
-  projection fraction along the arc (Person A's `t_proj`).
+  projection fraction along the arc (Saanvi Samayam's `t_proj`).
 * Dijkstra runs lazily from each needed source node with a distance cap
   (`max_route_m`) and results are cached, so each source node is expanded
   at most once per trip.

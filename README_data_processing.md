@@ -1,4 +1,4 @@
-# PathSnap – Person A: Data processing, EDA, labels, candidates
+# PathSnap – Saanvi Samayam: Data processing, EDA, labels, candidates
 
 ## Folder layout (drop into the team repo root)
 ```

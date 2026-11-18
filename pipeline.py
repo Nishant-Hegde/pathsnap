@@ -1,7 +1,7 @@
 """End-to-end prediction pipeline - this is what the API calls.
 
-    trip  ->  candidates + features   (Person A: features/candidates.build_frame)
-          ->  classifier probability  (Person B: models/predict.score_candidates)
+    trip  ->  candidates + features   (Saanvi Samayam: features/candidates.build_frame)
+          ->  classifier probability  (Rishab Naveen: models/predict.score_candidates)
           ->  HMM / Viterbi decoding  (hmm/viterbi)
           ->  one road arc per GPS point
 
@@ -39,7 +39,7 @@ def load_hmm_params(path: str = HMM_CONFIG) -> dict:
 
 
 def _scorer():
-    """Person B's scorer if available, else None (distance-only HMM)."""
+    """Rishab Naveen's scorer if available, else None (distance-only HMM)."""
     try:
         from models.predict import score_candidates  # type: ignore
         return score_candidates

@@ -1,5 +1,5 @@
 """
-Model Comparison and Visualization Generator (Owner: Person B)
+Model Comparison and Visualization Generator (Owner: Rishab Naveen)
 Generates consolidated markdown table and publication-quality plots from real experiment logs.
 """
 import os
@@ -111,7 +111,7 @@ def generate_markdown_table(df: pd.DataFrame):
         body += "| " + " | ".join(str(val) for val in row.values) + " |\n"
     md_content = "# PathSnap Model Comparison (Candidate Scoring Level)\n\n"
     md_content += header + sep + body
-    md_content += "\n*Note: Route continuity will be populated when integrated with Person C's HMM decode module.*\n"
+    md_content += "\n*Note: Route continuity will be populated when integrated with Nishant Hegde's HMM decode module.*\n"
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(md_content)
     print(f"Saved comparison table to {md_path}")

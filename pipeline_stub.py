@@ -2,7 +2,7 @@
 
 It chooses the closest candidate arc for each GPS observation.  It uses no
 reference route and is intentionally isolated so api/main.py can switch to
-``from pipeline import predict_route`` when Person C's implementation arrives.
+``from pipeline import predict_route`` when Nishant Hegde's implementation arrives.
 """
 from __future__ import annotations
 

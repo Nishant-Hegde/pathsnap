@@ -9,4 +9,4 @@
 | MLP | Neural Network | 0.8321 | 0.0722 | 0.7376 | 0.9131 | 0.8657 | 0.1165 | 16.8 |
 | Tuned_LightGBM | Gradient Boosting (Tuned) | 0.8993 | 0.0275 | 0.8538 | 0.913 | 0.8728 | 0.121 | 12.8 |
 
-*Note: Route continuity will be populated when integrated with Person C's HMM decode module.*
+*Note: Route continuity will be populated when integrated with Nishant Hegde's HMM decode module.*

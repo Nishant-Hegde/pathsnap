@@ -1,5 +1,5 @@
 """
-Bayesian Hyperparameter Optimization for LightGBM on Real Data (Owner: Person B)
+Bayesian Hyperparameter Optimization for LightGBM on Real Data (Owner: Rishab Naveen)
 Uses Optuna with Tree-structured Parzen Estimator (TPE) and fixed seed 42.
 Performs GroupKFold CV across training trips to find optimal hyperparameters.
 Saves trials.csv, best_params.json, optimization history plot, model.joblib, and model_meta.json.
@@ -146,15 +146,15 @@ def main():
 
     log_experiment("Tuned_LightGBM", "Gradient Boosting (Tuned)", best_params, tuned_cv, tuned_test)
 
-    # Export out-of-fold and test predictions for Person C's HMM
+    # Export out-of-fold and test predictions for Nishant Hegde's HMM
     features_dir = ARTIFACTS_DIR / "features"
     scored_test_path = features_dir / "scored_student_test.parquet"
     tuned_test["scored_test_df"].to_parquet(scored_test_path, index=False)
-    print(f"Exported {scored_test_path} for Person C")
+    print(f"Exported {scored_test_path} for Nishant Hegde")
 
     scored_train_oof_path = features_dir / "scored_train_oof.parquet"
     tuned_cv["oof_df"].to_parquet(scored_train_oof_path, index=False)
-    print(f"Exported {scored_train_oof_path} for Person C")
+    print(f"Exported {scored_train_oof_path} for Nishant Hegde")
 
 
 if __name__ == "__main__":

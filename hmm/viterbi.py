@@ -4,7 +4,7 @@ HMM formulation
 ---------------
 * Observations  o_t : the GPS fixes of a trip, in time order.
 * Hidden states     : at time t, the candidate arcs generated for GPS point t
-                      by Person A (features/candidates.py, radius 60 m, K<=10).
+                      by Saanvi Samayam (features/candidates.py, radius 60 m, K<=10).
                       Each state keeps its (arc id, distance, projection
                       fraction) so the candidate -> road-segment mapping is
                       preserved exactly.
@@ -78,7 +78,7 @@ class Lattice:
 def build_lattice(cand_df: pd.DataFrame, trip, graph: RoadGraph | None = None,
                   gap_s: float = DEFAULT_PARAMS["gap_s"]) -> Lattice:
     """Pre-compute everything that does not depend on the HMM parameters
-    or on the classifier probabilities. `cand_df` = Person A's build_frame
+    or on the classifier probabilities. `cand_df` = Saanvi Samayam's build_frame
     output for ONE trip (columns point, arc, dist, t_proj)."""
     if graph is None:
         graph = RoadGraph(trip)

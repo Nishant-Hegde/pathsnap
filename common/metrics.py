@@ -1,7 +1,7 @@
 """
-PathSnap Common Metrics Module (Owner: Person B)
+PathSnap Common Metrics Module (Owner: Rishab Naveen)
 Standardized evaluation metrics supporting both schema conventions:
-- Person A's generated candidate tables: grouping by ['trip_id', 'point'], label in 'y'
+- Saanvi Samayam's generated candidate tables: grouping by ['trip_id', 'point'], label in 'y'
 - Team contract: grouping by ['trip_id', 'obs_idx'], label in 'label'
 """
 from typing import List, Union

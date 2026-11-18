@@ -5,10 +5,10 @@ Usage examples
 # 1) Data-driven starting values for sigma and beta (training labels only)
 python -m hmm.evaluate --part train --estimate
 
-# 2) Distance-only HMM on student_test (works before Person B's model exists)
+# 2) Distance-only HMM on student_test (works before Rishab Naveen's model exists)
 python -m hmm.evaluate --part student_test
 
-# 3) With Person B's scores (A's candidate table + a `prob` column)
+# 3) With Rishab Naveen's scores (Saanvi Samayam's candidate table + a `prob` column)
 python -m hmm.evaluate --part student_test --scored artifacts/scored/student_test_scored.pkl
 
 # 4) Grid-search HMM params on training out-of-fold scores, save best config
@@ -39,7 +39,7 @@ from hmm.metrics import route_continuity, sequence_metrics, top1_accuracy  # noq
 from hmm.viterbi import DEFAULT_PARAMS, argmax_only, build_lattice, decode_lattice  # noqa: E402
 
 ALLOWED_PARTS = {"train", "student_test"}
-EXCLUDED_TRAIN = {"00000033", "00000054"}   # Person A: reference route misaligned
+EXCLUDED_TRAIN = {"00000033", "00000054"}   # Saanvi Samayam: reference route misaligned
 
 
 def load_scored(path):

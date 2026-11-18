@@ -1,7 +1,7 @@
 """
-Candidate Scoring Service (Owner: Person B)
+Candidate Scoring Service (Owner: Rishab Naveen)
 Provides score_candidates(cand_df) -> cand_df with extra column 'prob'
-Contractually used by Person C (HMM/Viterbi) and Person D (FastAPI inference engine).
+Contractually used by Nishant Hegde (HMM/Viterbi) and Prabhu R Habagali (FastAPI inference engine).
 """
 import json
 from pathlib import Path
@@ -46,7 +46,7 @@ def get_feature_cols() -> list:
 def score_candidates(cand_df: pd.DataFrame) -> pd.DataFrame:
     """
     Scores candidate road segments for each GPS observation.
-    Takes a candidate DataFrame from Person A (or API) and adds 'prob' column.
+    Takes a candidate DataFrame from Saanvi Samayam (or API) and adds 'prob' column.
     """
     if cand_df.empty:
         out = cand_df.copy()
