@@ -53,7 +53,7 @@ _PARAMS = None
 
 
 def predict_route(trip: Trip, params: dict | None = None) -> pd.DataFrame:
-    """Return DataFrame[point, arc] - exactly one arc per GPS point.
+    """Return DataFrame[obs_idx, arc_id] - exactly one arc per GPS point.
     df.attrs['info'] holds timings and decoder diagnostics."""
     global _SCORE, _PARAMS
     if _PARAMS is None:
@@ -69,6 +69,9 @@ def predict_route(trip: Trip, params: dict | None = None) -> pd.DataFrame:
         params = {**params, "alpha": 0.0}        # distance-only emissions
     t2 = time.time()
     out = decode(cand, trip, params, graph=RoadGraph(trip))
+    info = out.attrs.get("info", {})
+    out = out.rename(columns={"point": "obs_idx", "arc": "arc_id"})  # API contract names
+    out.attrs["info"] = info
     t3 = time.time()
     out.attrs["info"] = {**out.attrs.get("info", {}),
                          "candidates_ms": 1000 * (t1 - t0), "scoring_ms": 1000 * (t2 - t1),
