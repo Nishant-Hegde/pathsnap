@@ -5,3 +5,12 @@ scikit-learn
 matplotlib
 folium
 joblib
+lightgbm
+optuna
+fastapi
+uvicorn[standard]
+pydantic
+requests
+streamlit
+streamlit-folium
+reportlab
