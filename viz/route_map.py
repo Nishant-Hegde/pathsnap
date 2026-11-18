@@ -38,7 +38,7 @@ def _arc_lines(trip: Trip, arcs_seq):
 
 
 def make_route_map(trip: Trip, routes: dict, reference=None, network_buffer_m=150.0,
-                   max_network_arcs=6000) -> folium.Map:
+                   max_network_arcs=6000, focus=None) -> folium.Map:
     """routes: {layer name: per-point arc array}; reference: route arc list or None."""
     lat, lon = trip.track[:, 1], trip.track[:, 0]
     m = folium.Map(location=[float(np.mean(lat)), float(np.mean(lon))],
@@ -85,7 +85,10 @@ def make_route_map(trip: Trip, routes: dict, reference=None, network_buffer_m=15
         'padding:8px 10px;border:1px solid #999;border-radius:6px;font:12px sans-serif">'
         f'<b>{trip.trip_id}</b>{legend}</div>'))
     folium.LayerControl(collapsed=False).add_to(m)
-    m.fit_bounds([[float(lat.min()), float(lon.min())], [float(lat.max()), float(lon.max())]])
+    if focus is None:
+        m.fit_bounds([[float(lat.min()), float(lon.min())], [float(lat.max()), float(lon.max())]])
+    else:  # (lat, lon, zoom): open zoomed in on one area
+        m.location, m.options["zoom"] = [focus[0], focus[1]], int(focus[2])
     return m
 
 
@@ -94,6 +97,7 @@ def main():
     ap.add_argument("--trip", required=True)
     ap.add_argument("--scored", default=None, help="B's scored table, for the classifier-only layer")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--focus", default=None, help="lat,lon,zoom to open zoomed in, e.g. 61.6498,50.8333,18")
     a = ap.parse_args()
     assert "eval" not in a.trip.lower(), "maps with reference routes: train/student_test only"
     from hmm.graph import RoadGraph
@@ -113,7 +117,8 @@ def main():
     lat = build_lattice(cand, trip, RoadGraph(trip), gap_s=params["gap_s"])
     hmm, _ = decode_lattice(lat, prob, params)
     m = make_route_map(trip, {"Classifier-only": argmax_only(lat, prob), "HMM / Viterbi": hmm},
-                       reference=trip.route)
+                       reference=trip.route,
+                       focus=[float(v) for v in a.focus.split(",")] if a.focus else None)
     out = a.out or os.path.join("viz", "maps", f"route_{trip.trip_id}.html")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     m.save(out)

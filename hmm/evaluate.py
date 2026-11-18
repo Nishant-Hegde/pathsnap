@@ -53,8 +53,12 @@ def load_scored(path):
 def prepare(data_dir, part, scored=None, max_trips=None, verbose=True):
     """Load trips, build candidates (or take B's scored rows) and lattices."""
     assert part in ALLOWED_PARTS, "evaluator-testing data must never be used here"
+    part_dir = os.path.join(data_dir, part)
+    if not os.path.isdir(part_dir):
+        sys.exit(f"Dataset not found: {part_dir}\n"
+                 f"Copy the provided Student folder into data/ so you have data/{part}/<trip_id>/<trip_id>.track")
     items = []
-    for d in list_trips(os.path.join(data_dir, part))[:max_trips]:
+    for d in list_trips(part_dir)[:max_trips]:
         t0 = time.time()
         trip = load_trip(d)
         if part == "train" and trip.trip_id in EXCLUDED_TRAIN:

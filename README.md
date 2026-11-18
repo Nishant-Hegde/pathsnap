@@ -14,11 +14,11 @@ HMM/Viterbi decoder reconstructs a connected route. A FastAPI backend
 | `eda/` | exploratory analysis + Folium EDA maps | A |
 | `features/` | candidate generation and feature engineering | A |
 | `models/` | training + comparison of 5+ models | B |
-| `tuning/` | Bayesian hyperparameter optimisation | C |
-| `hmm/` | HMM / Viterbi route reconstruction | C |
+| `tuning/` | Bayesian hyperparameter optimisation | B |
+| `hmm/` | HMM / Viterbi route reconstruction, evaluation, error analysis | C |
 | `api/` | FastAPI backend | D |
 | `ui/` | evaluator interface | D |
-| `maps/` | Folium maps of predictions | D |
+| `viz/` | Folium route maps (`viz/route_map.py`), saved to `viz/maps/` | C |
 | `results/` | CSVs, logs, plots, maps | all |
 | `artifacts/` | trained model + configs | B/C |
 
@@ -42,8 +42,16 @@ python eda/folium_eda_map.py --part train --trips 00000048 00000002
 python features/build_dataset.py
 
 # 3. Models            -> TODO (Person B)
-# 4. Bayesian tuning   -> TODO (Person C)
-# 5. HMM / Viterbi     -> TODO (Person C)
+# 4. Bayesian tuning   -> TODO (Person B: python tuning/tune_optuna.py)
+# 5. HMM / Viterbi (needs artifacts/model.joblib from step 3)
+python -m hmm.test_synthetic --edge                       # sanity test, no data needed
+python -m hmm.make_scored                                 # OOF train + student_test probabilities -> artifacts/scored/
+python -m hmm.evaluate --part train --estimate            # data-driven sigma / beta
+python -m hmm.evaluate --part train --scored artifacts/scored/train_oof_scored.pkl --tune   # -> artifacts/hmm_config.json
+python -m hmm.evaluate --part student_test --scored artifacts/scored/student_test_scored.pkl
+python -m hmm.analyze                                     # error analysis
+python -m hmm.plots                                       # results/hmm/plots/
+python -m viz.route_map --trip data/student_test/00000091 --scored artifacts/scored/student_test_scored.pkl
 # 6. API / UI          -> TODO (Person D)
 ```
 
@@ -53,6 +61,15 @@ OpenStreetMap blocks tiles for pages opened as local files. Serve the repo:
 python -m http.server 8080
 # open http://localhost:8080/results/eda/maps/train_00000048.html
 ```
+
+## HMM / Viterbi results (student_test, 10 trips)
+| | Top-1 | Continuity | Route precision | Route recall |
+|---|---|---|---|---|
+| Classifier only | 87.3% | 95.1% | 87.0% | 98.3% |
+| Classifier + HMM | 93.0% | 99.9% | 98.5% | 98.5% |
+
+Tuned parameters (train out-of-fold only): beta = 5 m, sigma = 8 m, alpha = 0.7 (`artifacts/hmm_config.json`).
+Details: `results/hmm/` and report sections 5-6.
 
 ## Deployment (final evaluation)
 - **Laptop 1 (API):** TODO

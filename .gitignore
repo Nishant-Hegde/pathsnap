@@ -3,3 +3,4 @@ artifacts/features/*.pkl
 artifacts/features/*.parquet
 __pycache__/
 *.pyc
+artifacts/scored/
