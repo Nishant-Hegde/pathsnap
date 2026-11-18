@@ -25,7 +25,7 @@ HMM/Viterbi decoder reconstructs a connected route. A FastAPI backend
 | `api/` | FastAPI backend | Prabhu R Habagali |
 | `ui/` | evaluator interface | Prabhu R Habagali |
 | `viz/` | Folium route maps (`viz/route_map.py`), saved to `viz/maps/` | Nishant Hegde |
-| `report_materials/`| Complete technical report, PDF, individual section markdown files, figures, tables | Team |
+| `report/` | Complete technical report: PDF and markdown report | Team |
 | `results/` | CSVs, logs, plots, maps | Team |
 | `artifacts/` | trained model (`model.joblib`) + configs | Rishab Naveen / Nishant Hegde |
 
@@ -84,18 +84,28 @@ python -m http.server 8080
 | Classifier + HMM | 93.0% | 99.9% | 98.5% | 98.5% |
 
 Tuned parameters (train out-of-fold only): beta = 5 m, sigma = 8 m, alpha = 0.7 (`artifacts/hmm_config.json`).
-Details: `results/hmm/` and report sections 5-6.
+Details: `results/hmm/` and `report/PathSnap_Comprehensive_Technical_Report.pdf`.
 
-## Deployment (final evaluation)
-- **Laptop 1 (API):** Prabhu R Habagali (FastAPI backend serving predictions on port 8000)
-- **Laptop 2 (UI):** Prabhu R Habagali (Streamlit UI for interactive evaluation)
+## Two-Laptop Deployment (Final Evaluation Runbook)
+Both laptops must be connected to the same Wi-Fi network or mobile hotspot.
+
+- **Laptop 1 (FastAPI Server - Prabhu R Habagali):**
+  ```powershell
+  $env:PATHSNAP_DATA = (Get-Location).Path + "\data"
+  $env:PATHSNAP_SERVING_PARTITION = "student_test"   # or "evaluator_test"
+  uvicorn api.main:app --host 0.0.0.0 --port 8000
+  ```
+  *(Verify by opening `http://127.0.0.1:8000/docs` or checking IP via `ipconfig`)*
+
+- **Laptop 2 (Streamlit UI - Prabhu R Habagali):**
+  ```powershell
+  $env:PATHSNAP_API_URL = "http://<LAPTOP_1_IP>:8000"
+  streamlit run ui/app.py
+  ```
 
 ## Data-leakage safeguards
 - Evaluator-testing data is never used for training, feature selection or tuning.
 - Labels (`.route`) are read only for training/evaluation, never by the prediction pipeline.
-- Cross-validation is grouped by trip (`trip_id`).
+- Cross-validation is grouped strictly by trip (`trip_id`).
 
-See `README_data_processing.md` for data-processing design decisions.
-
-## AI-assistance disclosure
-TODO – describe which parts used AI tools, as required by the event policy.
+See [report/TECHNICAL_REPORT.md](report/TECHNICAL_REPORT.md) and [report/PathSnap_Comprehensive_Technical_Report.pdf](report/PathSnap_Comprehensive_Technical_Report.pdf) for complete design and evaluation details.
