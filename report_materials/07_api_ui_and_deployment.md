@@ -1,11 +1,12 @@
-# PathSnap: API, UI and two-laptop runbook
+# PathSnap: API, UI and Two-Laptop Runbook
+
+**Author:** Prabhu R Habagali (Person D: FastAPI Serving Backend, Streamlit UI & Deployment)  
+**Team:** PathSnap (UE24CS352A Hackathon, PES University)  
+**Collaborators:** Saanvi Samayam (Person A), Rishab Naveen (Person B), Nishant Hegde (Person C)  
 
 ## Development mode
 
-Place the supplied dataset under `data/student_test/<trip_id>/`.  The current
-student folder has no `eval_test` directory, so the server deliberately uses
-`student_test` until organisers provide the evaluation partition.
-
+Place the supplied dataset under `data/student_test/<trip_id>/` and `data/evaluator_test/<trip_id>/`.
 Install Person D's packages together with the data/feature packages:
 
 ```powershell

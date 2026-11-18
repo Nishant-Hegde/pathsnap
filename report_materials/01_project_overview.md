@@ -2,25 +2,32 @@
 
 UE24CS352A Machine Learning Hackathon, PES University.
 
+### Team Members
+- **Person A (Data Processing, EDA, Feature Engineering):** Saanvi Samayam
+- **Person B (Model Development, Comparison & Bayesian Tuning):** Rishab Naveen
+- **Person C (HMM & Viterbi Sequence Reconstruction, Route Continuity):** Nishant Hegde
+- **Person D (FastAPI Serving Backend, Streamlit UI & Deployment):** Prabhu R Habagali
+
 PathSnap matches noisy GPS trajectories to a road network: candidate road
 segments are generated for every GPS point, a classifier scores them, and an
 HMM/Viterbi decoder reconstructs a connected route. A FastAPI backend
 (Laptop 1) serves predictions to an evaluator UI (Laptop 2).
 
 ## Repository layout
-| Folder | Contents | Owner |
+| Folder | Contents | Owner / Member |
 |---|---|---|
-| `data_processing/` | raw-data loading, cleaning, projection, per-point labelling | A |
-| `eda/` | exploratory analysis + Folium EDA maps | A |
-| `features/` | candidate generation and feature engineering | A |
-| `models/` | training + comparison of 5+ models | B |
-| `tuning/` | Bayesian hyperparameter optimisation | B |
-| `hmm/` | HMM / Viterbi route reconstruction, evaluation, error analysis | C |
-| `api/` | FastAPI backend | D |
-| `ui/` | evaluator interface | D |
-| `viz/` | Folium route maps (`viz/route_map.py`), saved to `viz/maps/` | C |
-| `results/` | CSVs, logs, plots, maps | all |
-| `artifacts/` | trained model + configs | B/C |
+| `data_processing/` | raw-data loading, cleaning, projection, per-point labelling | Saanvi Samayam (Person A) |
+| `eda/` | exploratory analysis + Folium EDA maps | Saanvi Samayam (Person A) |
+| `features/` | candidate generation and feature engineering | Saanvi Samayam (Person A) |
+| `models/` | training + comparison of 5+ models | Rishab Naveen (Person B) |
+| `tuning/` | Bayesian hyperparameter optimisation | Rishab Naveen (Person B) |
+| `hmm/` | HMM / Viterbi route reconstruction, evaluation, error analysis | Nishant Hegde (Person C) |
+| `api/` | FastAPI backend | Prabhu R Habagali (Person D) |
+| `ui/` | evaluator interface | Prabhu R Habagali (Person D) |
+| `viz/` | Folium route maps (`viz/route_map.py`), saved to `viz/maps/` | Nishant Hegde (Person C) |
+| `report_materials/`| Complete technical report, PDF, individual section markdown files, figures, tables | Team |
+| `results/` | CSVs, logs, plots, maps | Team |
+| `artifacts/` | trained model (`model.joblib`) + configs | Rishab Naveen / Nishant Hegde |
 
 ## Setup
 ```bash
@@ -38,12 +45,17 @@ data/student_test/<trip_id>/...
 python eda/eda.py
 python eda/folium_eda_map.py --part train --trips 00000048 00000002
 
-# 2. Labels, candidates and features
+# 2. Labels, candidates and features (Person A - Saanvi Samayam)
 python features/build_dataset.py
 
-# 3. Models            -> TODO (Person B)
-# 4. Bayesian tuning   -> TODO (Person B: python tuning/tune_optuna.py)
-# 5. HMM / Viterbi (needs artifacts/model.joblib from step 3)
+# 3. Models (Person B - Rishab Naveen)
+python -m models.m4_boosting     # Trains LightGBM on 5-fold GroupKFold
+python -m models.compare         # Generates comparison tables and benchmark plots
+
+# 4. Bayesian tuning (Person B - Rishab Naveen)
+python -m tuning.tune_optuna     # 25-trial Optuna TPE tuning -> artifacts/model.joblib
+
+# 5. HMM / Viterbi (Person C - Nishant Hegde)
 python -m hmm.test_synthetic --edge                       # sanity test, no data needed
 python -m hmm.make_scored                                 # OOF train + student_test probabilities -> artifacts/scored/
 python -m hmm.evaluate --part train --estimate            # data-driven sigma / beta
@@ -52,7 +64,10 @@ python -m hmm.evaluate --part student_test --scored artifacts/scored/student_tes
 python -m hmm.analyze                                     # error analysis
 python -m hmm.plots                                       # results/hmm/plots/
 python -m viz.route_map --trip data/student_test/00000091 --scored artifacts/scored/student_test_scored.pkl
-# 6. API / UI          -> TODO (Person D)
+
+# 6. API / UI (Person D - Prabhu R Habagali)
+# Laptop 1: uvicorn api.main:app --host 0.0.0.0 --port 8000
+# Laptop 2: streamlit run ui/app.py
 ```
 
 ### Viewing Folium maps

@@ -231,7 +231,7 @@ def build_pdf(output_pdf_path: str):
 
     meta_text = """
     <b>Course / Hackathon:</b> UE24CS352A Machine Learning Hackathon | PES University<br/>
-    <b>Team Members:</b> Person A (Data/EDA), Person B (Models/Tuning), Person C (HMM/Viterbi), Person D (API/UI)<br/>
+    <b>Team Members:</b> Saanvi Samayam (Person A: Data/EDA), Rishab Naveen (Person B: Models/Tuning), Nishant Hegde (Person C: HMM/Viterbi), Prabhu R Habagali (Person D: API/UI)<br/>
     <b>Evaluation Repository:</b> https://github.com/Nishant-Hegde/pathsnap (Branch: main)<br/>
     <b>Primary Results:</b> 94.09% Pointwise Accuracy & 99.99% Route Continuity on Held-out Evaluator Partition
     """
@@ -255,10 +255,10 @@ def build_pdf(output_pdf_path: str):
     story.append(Paragraph(p2, body_style))
 
     arch_points = [
-        "<b>1. Spatial Ingestion & Feature Engineering (Person A):</b> Raw GPS tracks and road networks are projected into local metric coordinates. For each GPS point, KD-Trees retrieve the top 10 candidate arcs within 60 m, extracting 21 geometric, kinematic, and topological features.",
-        "<b>2. Machine Learning Candidate Scoring (Person B):</b> Evaluates 5 model families under 5-Fold GroupKFold CV. A Bayesian-tuned LightGBM model predicts the posterior probability P(arc | features) for every candidate road segment.",
-        "<b>3. HMM & Viterbi Sequence Decoding (Person C):</b> Constructs a dynamic programming trellis combining LightGBM emission probabilities with shortest network travel distance transitions to decode the globally optimal continuous route.",
-        "<b>4. Distributed Serving & Evaluation Interface (Person D):</b> Laptop 1 hosts a production FastAPI backend calculating metrics server-side; Laptop 2 runs a Streamlit UI allowing interactive inspection of GPS points, road geometry, and predicted routes."
+        "<b>1. Spatial Ingestion & Feature Engineering (Person A &ndash; Saanvi Samayam):</b> Raw GPS tracks and road networks are projected into local metric coordinates. For each GPS point, KD-Trees retrieve the top 10 candidate arcs within 60 m, extracting 21 geometric, kinematic, and topological features.",
+        "<b>2. Machine Learning Candidate Scoring (Person B &ndash; Rishab Naveen):</b> Evaluates 5 model families under 5-Fold GroupKFold CV. A Bayesian-tuned LightGBM model predicts the posterior probability P(arc | features) for every candidate road segment.",
+        "<b>3. HMM & Viterbi Sequence Decoding (Person C &ndash; Nishant Hegde):</b> Constructs a dynamic programming trellis combining LightGBM emission probabilities with shortest network travel distance transitions to decode the globally optimal continuous route.",
+        "<b>4. Distributed Serving & Evaluation Interface (Person D &ndash; Prabhu R Habagali):</b> Laptop 1 hosts a production FastAPI backend calculating metrics server-side; Laptop 2 runs a Streamlit UI allowing interactive inspection of GPS points, road geometry, and predicted routes."
     ]
     for pt in arch_points:
         story.append(Paragraph(pt, bullet_style))
@@ -277,7 +277,7 @@ def build_pdf(output_pdf_path: str):
     story.append(Paragraph(p_eda, body_style))
 
     eda_findings = [
-        "<b>Metric Equirectangular Projection:</b> Coordinates span latitudes 47° to 56° N across Europe. A single UTM zone would induce intolerable distortion. Person A implemented a per-trip local equirectangular projection centered on each trip's median coordinate, yielding metric distance accuracy under 0.1%.",
+        "<b>Metric Equirectangular Projection:</b> Coordinates span latitudes 47° to 56° N across Europe. A single UTM zone would induce intolerable distortion. Saanvi Samayam (Person A) implemented a per-trip local equirectangular projection centered on each trip's median coordinate, yielding metric distance accuracy under 0.1%.",
         "<b>Ground-Truth Label Alignment:</b> <code>.route</code> provides an ordered arc sequence without per-GPS timestamps. A monotone dynamic programming algorithm (DTW-style) aligned each GPS point to its corresponding route arc, enforcing forward-only progression.",
         "<b>Data Quality & Trip Exclusions:</b> Audit logs revealed 96.5% of GPS intervals are exactly 1 second, with 22 trips containing signal gaps > 60s. Trips <code>00000033</code> and <code>00000054</code> had median GPS-to-route distances > 120 m (the vehicle clearly departed from the recorded route). These two anomalous trips were strictly excluded from training.",
         "<b>Candidate Class Imbalance:</b> Spatial candidate generation produced 1,259,224 candidate rows for training (14.3% positive rate, ~6:1 negative-to-positive ratio) with an empirical candidate miss rate of only 1.50% in train and 0.26% in student test."
@@ -565,7 +565,7 @@ def build_pdf(output_pdf_path: str):
 
     p_hmm = """
     <b>Why Pointwise Classifiers Fall Short:</b> Independent classification maps GPS points to roads with 87% accuracy, but frequently outputs physically impossible jumps (e.g. alternating between parallel access roads and main highways). The <b>Hidden Markov Model (HMM)</b> enforces physical topological reachability over the directed road network.
-    <br/>• <b>Emission Modeling:</b> P(O_t | S_t = a) = (P_hat(a | x_t) + &epsilon;)^&alpha;, directly utilizing Person B's tuned LightGBM probabilities (&alpha;=0.7, &epsilon;=1e-4).
+    <br/>• <b>Emission Modeling:</b> P(O_t | S_t = a) = (P_hat(a | x_t) + &epsilon;)^&alpha;, directly utilizing Rishab Naveen's (Person B) tuned LightGBM probabilities (&alpha;=0.7, &epsilon;=1e-4).
     <br/>• <b>Transition Modeling:</b> P(b | a) = (1/&beta;) exp(-|d_net(a,b) - d_euc| / &beta;), penalizing discrepancies between road network distance and direct Euclidean movement.
     <br/>• <b>Viterbi Dynamic Programming:</b> Finds the argmax sequence of road arcs globally across the entire trip in log space.
     """

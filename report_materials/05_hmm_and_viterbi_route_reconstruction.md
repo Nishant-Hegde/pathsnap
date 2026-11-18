@@ -1,12 +1,16 @@
 # 5. HMM and Viterbi Route Reconstruction
 
+**Author:** Nishant Hegde (Person C: HMM & Viterbi Sequence Reconstruction, Route Continuity)  
+**Team:** PathSnap (UE24CS352A Hackathon, PES University)  
+**Collaborators:** Saanvi Samayam (Person A), Rishab Naveen (Person B), Prabhu R Habagali (Person D)  
+
 ## 5.1 Route Reconstruction Formulation
 Independent point-level candidate classifications predict road arcs based purely on local spatial and kinematic features. However, vehicle movement is physically constrained to a directed, topologically continuous road network. Pointwise argmax predictions can jump between disconnected parallel streets or produce invalid transitions.
 
 We implemented a Hidden Markov Model (HMM) decoded via the Viterbi algorithm to resolve trajectory-level sequence continuity:
 - **Hidden States ($S_t$):** The set of candidate road arcs $a \in \mathcal{C}_t$ generated for GPS point $t$.
 - **Observations ($O_t$):** The GPS observation vector (coordinates, speed, heading, timestamp).
-- **Emission Probability ($P(O_t \mid S_t = a)$):** The calibrated posterior probability $\hat{P}(a \mid x)$ output by Person B's tuned LightGBM model:
+- **Emission Probability ($P(O_t \mid S_t = a)$):** The calibrated posterior probability $\hat{P}(a \mid x)$ output by Rishab Naveen's (Person B) tuned LightGBM model:
   $$P(O_t \mid S_t = a) = (\hat{P}(a \mid x_t) + \epsilon)^\alpha$$
   where $\alpha = 0.7$ and $\epsilon = 0.0001$.
 - **Transition Probability ($P(S_{t+1} = b \mid S_t = a)$):** Models the plausibility of moving from road arc $a$ to arc $b$ within time $\Delta t$:
