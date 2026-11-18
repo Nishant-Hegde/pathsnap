@@ -1,4 +1,4 @@
-"""Folium EDA map: GPS observations, nearby road network and reference route.
+﻿"""Folium EDA map: GPS observations, nearby road network and reference route.
 
 Usage (needs `pip install folium`):
   python eda/folium_eda_map.py --part train --trips 00000048 00000002
@@ -19,7 +19,7 @@ from features.candidates import relevant_arcs  # noqa: E402
 LEGEND = """
 <div style="position: fixed; bottom: 30px; left: 30px; z-index: 9999; background: white;
  padding: 10px 14px; border: 1px solid #999; border-radius: 6px; font-size: 13px;">
-<b>PathSnap EDA – {part} trip {tid}</b><br>
+<b>PathSnap EDA - {part} trip {tid}</b><br>
 <span style="color:#9e9e9e">&#9644;</span> Road network (within 150 m)<br>
 <span style="color:#1aa64b">&#9644;</span> Reference route<br>
 <span style="color:#2b7bff">&#9679;</span> GPS observations<br>
@@ -35,7 +35,7 @@ def seg(tr, a):
 def make_map(trip_dir, out_path, part):
     tr = load_trip(trip_dir)
     lat, lon, t = tr.track[:, 1], tr.track[:, 0], tr.track[:, 2]
-    m = folium.Map(location=[float(lat.mean()), float(lon.mean())], zoom_start=14, tiles="cartodbpositron")
+    m = folium.Map(location=[float(lat.mean()), float(lon.mean())], zoom_start=14, tiles="OpenStreetMap")
 
     net = folium.FeatureGroup(name="Road network", show=True)
     for a in relevant_arcs(tr.gps_xy, tr.node_xy, tr.arcs, 150):
