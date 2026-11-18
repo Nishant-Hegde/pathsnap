@@ -352,11 +352,10 @@ Place the supplied dataset under `data/student_test/<trip_id>/`.  The current
 student folder has no `eval_test` directory, so the server deliberately uses
 `student_test` until organisers provide the evaluation partition.
 
-Install Prabhu R Habagali's packages together with the data/feature packages:
+Install all packages (API/UI included) from the single requirements file:
 
 ```powershell
-pip install -r requirements_api_ui.txt
-pip install numpy pandas scipy scikit-learn
+pip install -r requirements.txt
 ```
 
 On Laptop 1, from the repository root:
@@ -370,7 +369,7 @@ uvicorn api.main:app --host 0.0.0.0 --port 8000
 Open `http://127.0.0.1:8000/docs` on Laptop 1 to test the API. `GET /health`
 checks startup; `GET /trips` lists choices; `POST /predict` runs a route.
 
-On Laptop 2, install `requirements_api_ui.txt`, then run:
+On Laptop 2, install `requirements.txt`, then run:
 
 ```powershell
 $env:PATHSNAP_API_URL = "http://LAPTOP_1_IP:8000"

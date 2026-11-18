@@ -25,7 +25,7 @@ HMM/Viterbi decoder reconstructs a connected route. A FastAPI backend
 | `api/` | FastAPI backend | Prabhu R Habagali |
 | `ui/` | evaluator interface | Prabhu R Habagali |
 | `viz/` | Folium route maps (`viz/route_map.py`), saved to `viz/maps/` | Nishant Hegde |
-| `report/` | Complete technical report: PDF and markdown report | Team |
+| `report/` | Complete technical report (markdown) | Team |
 | `results/` | CSVs, logs, plots, maps | Team |
 | `artifacts/` | trained model (`model.joblib`) + configs | Rishab Naveen / Nishant Hegde |
 
@@ -84,7 +84,7 @@ python -m http.server 8080
 | Classifier + HMM | 93.0% | 99.9% | 98.5% | 98.5% |
 
 Tuned parameters (train out-of-fold only): beta = 5 m, sigma = 8 m, alpha = 0.7 (`artifacts/hmm_config.json`).
-Details: `results/hmm/` and `report/PathSnap_Comprehensive_Technical_Report.pdf`.
+Details: `results/hmm/` and `report/TECHNICAL_REPORT.md`.
 
 ## Two-Laptop Deployment (Final Evaluation Runbook)
 Both laptops must be connected to the same Wi-Fi network or mobile hotspot.
@@ -108,4 +108,4 @@ Both laptops must be connected to the same Wi-Fi network or mobile hotspot.
 - Labels (`.route`) are read only for training/evaluation, never by the prediction pipeline.
 - Cross-validation is grouped strictly by trip (`trip_id`).
 
-See [report/TECHNICAL_REPORT.md](report/TECHNICAL_REPORT.md) and [report/PathSnap_Comprehensive_Technical_Report.pdf](report/PathSnap_Comprehensive_Technical_Report.pdf) for complete design and evaluation details.
+See [report/TECHNICAL_REPORT.md](report/TECHNICAL_REPORT.md) for complete design and evaluation details.
