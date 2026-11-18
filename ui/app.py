@@ -47,7 +47,8 @@ if result:
     columns[3].metric("Server inference", f"{metrics['inference_ms']:.1f} ms")
 
     gps = result["gps"]
-    m = folium.Map(location=gps[len(gps) // 2], zoom_start=14, control_scale=True)
+    m = folium.Map(location=gps[len(gps) // 2], zoom_start=14, control_scale=True, tiles=None)
+    folium.TileLayer("OpenStreetMap", name="Folium Map", control=True).add_to(m)
     gps_layer = folium.FeatureGroup(name="Raw GPS observations", show=True)
     for point in gps:
         folium.CircleMarker(point, radius=2, color="#2563eb", fill=True, fill_opacity=0.65).add_to(gps_layer)
