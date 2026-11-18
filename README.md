@@ -108,4 +108,4 @@ Both laptops must be connected to the same Wi-Fi network or mobile hotspot.
 - Labels (`.route`) are read only for training/evaluation, never by the prediction pipeline.
 - Cross-validation is grouped strictly by trip (`trip_id`).
 
-See [report/TECHNICAL_REPORT.md](report/TECHNICAL_REPORT.md) for complete design and evaluation details.
+See [report/TECHNICAL_REPORT.md](report/TECHNICAL_REPORT.md) and [report/PathSnap_Technical_Report.pdf](report/PathSnap_Technical_Report.pdf) for complete design and evaluation details.
