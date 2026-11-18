@@ -1,0 +1,4 @@
+data/
+artifacts/features/*.pkl
+__pycache__/
+*.pyc

@@ -1,0 +1,26 @@
+{
+  "radius": 60.0,
+  "k": 10,
+  "excluded_trips": {
+    "00000033": "median GPS-to-label distance 122.4 m",
+    "00000054": "median GPS-to-label distance 140.1 m"
+  },
+  "train": {
+    "trips": 78,
+    "points": 183260,
+    "candidate_rows": 1259224,
+    "candidate_miss_rate": 0.014962348575793927,
+    "points_without_candidates": 1279,
+    "positive_rate": 0.14335654339497977,
+    "label_dist_median_m": 4.957289830061868
+  },
+  "student_test": {
+    "trips": 10,
+    "points": 19160,
+    "candidate_rows": 140950,
+    "candidate_miss_rate": 0.0026096033402922547,
+    "points_without_candidates": 0,
+    "positive_rate": 0.13557999290528555,
+    "label_dist_median_m": 5.257533901367515
+  }
+}
