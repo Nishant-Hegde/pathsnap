@@ -1,0 +1,23 @@
+[
+  "dist",
+  "dist_rank",
+  "dist_minus_min",
+  "dist_ratio",
+  "head_diff",
+  "head_diff_x_speed",
+  "speed",
+  "arc_len",
+  "t_proj",
+  "n_cand",
+  "dist_prev",
+  "dist_next",
+  "dist_ctx_mean",
+  "head_diff_next",
+  "dt_prev",
+  "dt_next",
+  "jitter",
+  "from_indeg",
+  "to_outdeg",
+  "two_way",
+  "end_proximity"
+]
