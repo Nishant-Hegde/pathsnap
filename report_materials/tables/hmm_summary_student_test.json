@@ -1,0 +1,23 @@
+{
+  "params": {
+    "alpha": 0.7,
+    "sigma": 8.0,
+    "beta": 5.0,
+    "eps": 0.0001,
+    "vmax": 60.0,
+    "speed_slack": 50.0,
+    "gap_s": 60.0
+  },
+  "clf_top1": 0.8728601252609604,
+  "clf_continuity": 0.951437740280832,
+  "clf_route_precision": 0.8695748931161085,
+  "clf_route_recall": 0.9828949453304553,
+  "clf_route_jaccard": 0.8565874697036661,
+  "hmm_top1": 0.929749478079332,
+  "hmm_continuity": 0.9992167443917293,
+  "hmm_route_precision": 0.9846065743997806,
+  "hmm_route_recall": 0.9847221073388616,
+  "hmm_route_jaccard": 0.9700950202101151,
+  "n_trips": 10,
+  "n_breaks": 6
+}
