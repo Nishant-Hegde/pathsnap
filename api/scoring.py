@@ -11,21 +11,27 @@ import pandas as pd
 
 from data_processing.io_utils import Trip
 from data_processing.labels import align_route
+from hmm.graph import RoadGraph
+
+CONTINUITY_MAX_GAP_M = 30.0
 
 
-def route_continuity(arc_ids: np.ndarray, arcs: np.ndarray) -> float | None:
-    """Share of adjacent predictions that repeat or connect head-to-tail."""
+def route_continuity(arc_ids: np.ndarray, graph: RoadGraph) -> float:
+    """Use the same 30 m short-link rule as hmm.evaluate for report consistency."""
     if len(arc_ids) < 2:
-        return None
+        return 1.0
     left, right = arc_ids[:-1], arc_ids[1:]
-    connected = (left == right) | (arcs[left, 1] == arcs[right, 0])
+    connected = (left == right) | (graph.arcs[left, 1] == graph.arcs[right, 0])
+    for i in np.flatnonzero(~connected):
+        connected[i] = graph.connected(int(left[i]), int(right[i]), CONTINUITY_MAX_GAP_M)
     return float(connected.mean())
 
 
 def score_prediction(predicted: pd.DataFrame, trip: Trip) -> dict[str, float | None]:
     """Calculate evaluation metrics on the server when a reference is available."""
     chosen = predicted.sort_values("obs_idx")["arc_id"].to_numpy(dtype=np.int64)
-    continuity = route_continuity(chosen, trip.arcs)
+    graph = RoadGraph(trip)
+    continuity = route_continuity(chosen, graph)
     if trip.route is None:
         return {"top1_accuracy": None, "route_continuity": continuity}
 

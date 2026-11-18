@@ -19,7 +19,7 @@ if str(ROOT) not in sys.path:
 from api.schemas import Metrics, PredictRequest, PredictResponse
 from api.scoring import score_prediction
 from data_processing.io_utils import Trip, list_trips, load_trip
-from pipeline_stub import predict_route
+from pipeline import predict_route
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
 LOGGER = logging.getLogger("pathsnap.api")

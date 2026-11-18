@@ -38,14 +38,14 @@ for every Run click; it does not use saved predictions.
 
 ## Switching to the final model pipeline
 
-`api/main.py` currently imports `pipeline_stub.predict_route`, which selects the
-closest road candidate and exists only to enable early UI/API integration. When
-the final `pipeline.predict_route` is ready, replace that import with:
-
-```python
-from pipeline import predict_route
-```
+`api/main.py` now imports `pipeline.predict_route`. The `pipeline_stub.py` file
+is retained only as an early integration fallback and is not used by the API.
 
 The predictor receives a `Trip` copy whose `route` is `None`. Reference routes
 remain available only inside `api/scoring.py`, which returns aggregate metrics
 but never exposes routes or per-point labels to the UI.
+
+Route continuity uses the same definition as `hmm.evaluate`: same or directly
+connected arcs count, and a transition with a road-network gap of at most 30 m
+also counts. This permits one very short skipped arc and keeps API/report values
+consistent.
