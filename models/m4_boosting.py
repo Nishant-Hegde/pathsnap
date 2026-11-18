@@ -2,6 +2,10 @@
 Model 4: LightGBM / Gradient Boosting (Sequential Tree Ensemble)
 Family: Gradient Boosting (GBDT)
 """
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from lightgbm import LGBMClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline

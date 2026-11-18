@@ -2,6 +2,10 @@
 Model 1: Logistic Regression (Linear Probabilistic Baseline)
 Family: Generalized Linear Models (GLM)
 """
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
